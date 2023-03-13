@@ -79,6 +79,69 @@ class Mineral
       end
 end
 
+def explore_planet (planet)
+    puts 'Please enter a direction(N, E, S, W)' 
+    direction = gets.chomp.upcase
+    random_encounter = rand(100)
+    # Planet events 
+    # - Get ambushed (randomize) OR
+    # - Discover new places, animals, plants OR
+    # - Nothing happens
+    case random_encounter
+    when 0..15
+      'No events have occured at this time'
+    when 16..25
+    index = rand (planet.animals.length - 1)
+        encounter_animal = planet.animals[index]
+        if encounter_animal.name.nil?
+           puts "You have encountered a new animal species! This is one for the history books now closely but carefully note these characteristics about the animal. It is #{encounter_animal.size} size, With a #{encounter_animal.color} color, This animal has #{encounter_animal.legs} legs, they have #{encounter_animal.heads} head/heads.they have #{encounter_animal.arms} arms. It appears to be a species of #{encounter_animal.type}, It has a diet of #{encounter_animal.diet}." 
+            puts 'what would you like to name your new discovery'
+            encounter_animal.name = gets.chomp
+            planet.animals[index].name = encounter_animal.name
+        else
+           puts "You have encountered an animal! You recognize from it's  #{encounter_animal.size} size, #{encounter_animal.color} color, #{encounter_animal.legs} leg, #{encounter_animal.heads} head/heads, and #{encounter_animal.arms} arms. It appears to be a #{encounter_animal.name}."
+        end   
+    when 26..60
+        
+        index = rand (planet.plants.length - 1)
+        encounter_plant = planet.plants[index]
+        plant_flower = encounter_plant.flower ? 'has flowers': 'does not have flowers'
+        if encounter_plant.name.nil?
+           puts "You have found a unique plant species unlike any on earth! carefully note these characteristics about the plant. It is #{encounter_plant.size} size, With a #{encounter_plant.color} color, This plant #{plant_flower}, It appears to be a species of #{encounter_plant.type}." 
+            puts 'what would you like to name your new discovery'
+            encounter_plant.name = gets.chomp
+            planet.plants[index].name = encounter_plant.name
+        else
+            puts "You have found a familiar plant! based on these characteristics about the plant. You recognize it to be a #{encounter_plant.name}! It is #{encounter_plant.size} with a #{encounter_plant.color} color, This plant #{encounter_plant.flower ? 'has flowers': 'does not have flowers'}, It appears to be a species of #{encounter_plant.type}." 
+        end   
+      
+    when 61..90
+        index = rand (planet.minerals.length - 1)
+        encounter_mineral = planet.minerals[index]
+        if encounter_mineral.name.nil?
+            puts "You have found a #{encounter_mineral.color} color mineral that is common to this planet, but it has no name, Please enter a name for it now. it has a #{encounter_mineral.type}, there is also a #{encounter_mineral.hardness} hardness about this mineral. It can be melted at #{encounter_mineral.melting_point} degrees Fahrenheit."
+            puts 'what would you like to name your new discovery'
+            encounter_mineral.name = gets.chomp
+            planet.minerals[index].name = encounter_mineral.name
+        else
+           puts "You have found some #{encounter_mineral.name}! It is a #{encounter_mineral.color} #{encounter_mineral.type}, there is also a #{encounter_mineral.hardness} hardness about this mineral. It can be melted at #{encounter_mineral.melting_point} degrees Fahrenheit."
+        end   
+    when 91..100
+        index = rand (planet.places.length - 1)
+        encounter_place = planet.places[index]
+        if encounter_place.name.nil?
+           puts "You have encountered a new #{encounter_place.size} #{encounter_place.type}, this is a beautiful site! It has a population of #{encounter_place.population}." 
+            puts 'what would you like to name your new discovery'
+            encounter_place.name = gets.chomp
+            planet.places[index].name = encounter_place.name
+        else
+           puts "You have returned to #{encounter_place.name}! It is a  #{encounter_place.size} #{encounter_place.type}, with a population of #{encounter_place.population}."
+        end   
+    else
+      'Error'
+    end
+end 
+
 # Initialize a new game
 puts 'Please enter a user name.'
 new_player = Player.new(gets.chomp)
@@ -86,3 +149,13 @@ new_player = Player.new(gets.chomp)
 start_planet = Planet.new()
 
 puts "Welcome, #{new_player.name}. You have landed onto a new and beautiful planet. The planet has a #{start_planet.color} color. The temperature is #{start_planet.temperature} degrees Fahrenheit. There are many animals of various hostility levels, please be careful. Explore to discover new life and resources. This planet has #{start_planet.water}% of water."
+
+loop do 
+      explore_planet start_planet
+
+      puts 'Would you like to continue exploring? (y/n)'
+      exploring = gets.downcase.chomp
+      if 'n' == exploring 
+            break
+      end
+end
