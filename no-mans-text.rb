@@ -100,7 +100,12 @@ def explore_planet (planet)
             planet.animals[index].name = encounter_animal.name
         else
            puts "You have encountered an animal! You recognize from it's  #{encounter_animal.size} size, #{encounter_animal.color} color, #{encounter_animal.legs} leg, #{encounter_animal.heads} head/heads, and #{encounter_animal.arms} arms. It appears to be a #{encounter_animal.name}."
-        end   
+        end
+
+        if 4 < planet.hostility + encounter_animal.hostility
+            combat_encounter (encounter_animal)
+        end
+
     when 26..60
         
         index = rand (planet.plants.length - 1)
@@ -114,6 +119,10 @@ def explore_planet (planet)
         else
             puts "You have found a familiar plant! based on these characteristics about the plant. You recognize it to be a #{encounter_plant.name}! It is #{encounter_plant.size} with a #{encounter_plant.color} color, This plant #{encounter_plant.flower ? 'has flowers': 'does not have flowers'}, It appears to be a species of #{encounter_plant.type}." 
         end   
+
+        if 4 < planet.hostility + encounter_plant.hostility
+            combat_encounter (encounter_plant)
+        end
       
     when 61..90
         index = rand (planet.minerals.length - 1)
@@ -138,9 +147,65 @@ def explore_planet (planet)
            puts "You have returned to #{encounter_place.name}! It is a  #{encounter_place.size} #{encounter_place.type}, with a population of #{encounter_place.population}."
         end   
     else
-      'Error'
+      puts 'Error'
     end
 end 
+
+# Create a function to manage combat encounters
+# Function will receive an argument for the opponent
+# During combat, the player will be able to continue fighting, attempt to flee, or surrender
+
+def combat_encounter (opponent)
+      # Initialize the fight
+      opponent_health = 2
+      # player_health = new_player.health # Not working
+      player_health = 10
+      fighting = 'yes'
+      puts "The #{opponent.name} is menacing! It begins to attack you!"
+
+      loop do
+            # Provide player with options for combat
+            puts 'Would you like to fight, flee, or surrender?'
+            player_move = gets.downcase.chomp
+
+            case player_move
+            when 'fight'
+                  puts 'You strike with your bare hands at your opponent!'
+                  if 3 < rand(10)
+                        puts "You successfully hit the #{['arm', 'leg', 'body', 'head'].sample} of the #{opponent.name}!"
+                        opponent_health -= 1
+                        if 0 >= opponent_health
+                              puts "You have defeated the #{opponent.name}!"
+                              fighting = 'no'
+                        end
+                  else
+                        puts "The #{opponent.name} #{['strikes', 'bashes', 'slashes', 'stomps', 'bites'].sample} your #{['arm', 'leg', 'body', 'head'].sample}."
+                        player_health -= 1
+                  end
+            when 'flee'
+                  puts 'You attempt to flee!'
+                  if 3 < rand(10)
+                        puts 'You successfully escape!'
+                        fighting = 'no'
+                  else
+                        puts 'You failed to escape!'
+                  end
+            when 'surrender'
+                  puts "You surrender, and the #{opponent.name} enslaves you!"
+                  fighting = 'no'
+            else
+                  puts "You failed to pick an effective choice, and take damage as the #{opponent.name} strikes you!"
+                  player_health -= 1
+            end
+
+            if 0 >= player_health 
+                  puts 'You have died!'
+                  fighting = 'no'
+            end
+
+            break if 'no' == fighting
+      end
+end
 
 # Initialize a new game
 puts 'Please enter a user name.'
@@ -155,7 +220,5 @@ loop do
 
       puts 'Would you like to continue exploring? (y/n)'
       exploring = gets.downcase.chomp
-      if 'n' == exploring 
-            break
-      end
+      break if 'n' == exploring 
 end
