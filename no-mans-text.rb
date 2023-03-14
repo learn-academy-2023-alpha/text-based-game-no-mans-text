@@ -80,7 +80,7 @@ class Mineral
 end
 
 def explore_planet (planet)
-    puts 'Please enter a direction(N, E, S, W)' 
+    puts 'Please enter a direction (N, E, S, W)'
     direction = gets.chomp.upcase
     random_encounter = rand(100)
     # Planet events 
@@ -89,7 +89,7 @@ def explore_planet (planet)
     # - Nothing happens
     case random_encounter
     when 0..15
-      'No events have occured at this time'
+      puts 'No events have occured at this time'
     when 16..25
     index = rand (planet.animals.length - 1)
         encounter_animal = planet.animals[index]
@@ -107,7 +107,6 @@ def explore_planet (planet)
         end
 
     when 26..60
-        
         index = rand (planet.plants.length - 1)
         encounter_plant = planet.plants[index]
         plant_flower = encounter_plant.flower ? 'has flowers': 'does not have flowers'
@@ -158,8 +157,6 @@ end
 def combat_encounter (opponent)
       # Initialize the fight
       opponent_health = 2
-      # player_health = new_player.health # Not working
-      player_health = 10
       fighting = 'yes'
       puts "The #{opponent.name} is menacing! It begins to attack you!"
 
@@ -180,7 +177,7 @@ def combat_encounter (opponent)
                         end
                   else
                         puts "The #{opponent.name} #{['strikes', 'bashes', 'slashes', 'stomps', 'bites'].sample} your #{['arm', 'leg', 'body', 'head'].sample}."
-                        player_health -= 1
+                        $new_player.health -= 1
                   end
             when 'flee'
                   puts 'You attempt to flee!'
@@ -198,7 +195,7 @@ def combat_encounter (opponent)
                   player_health -= 1
             end
 
-            if 0 >= player_health 
+            if 0 >= $new_player.health 
                   puts 'You have died!'
                   fighting = 'no'
             end
@@ -209,11 +206,11 @@ end
 
 # Initialize a new game
 puts 'Please enter a user name.'
-new_player = Player.new(gets.chomp)
+$new_player = Player.new(gets.chomp)
 
 start_planet = Planet.new()
 
-puts "Welcome, #{new_player.name}. You have landed onto a new and beautiful planet. The planet has a #{start_planet.color} color. The temperature is #{start_planet.temperature} degrees Fahrenheit. There are many animals of various hostility levels, please be careful. Explore to discover new life and resources. This planet has #{start_planet.water}% of water."
+puts "Welcome, #{$new_player.name}. You have landed onto a new and beautiful planet. The planet has a #{start_planet.color} color. The temperature is #{start_planet.temperature} degrees Fahrenheit. There are many animals of various hostility levels, please be careful. Explore to discover new life and resources. This planet has #{start_planet.water}% of water."
 
 loop do 
       explore_planet start_planet
