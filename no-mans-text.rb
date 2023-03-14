@@ -275,6 +275,8 @@ end
 # Expansion idea: provide a way to influence seed for random number generators
 puts 'Please enter a user name.'
 
+$new_player = Player.new(gets.chomp)
+
 # Player is created as a global object to provide access within various functions
 # Expansion idea: pass the player object as an argument to various functions
 $new_player = Player.new(gets.chomp)
